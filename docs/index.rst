@@ -102,7 +102,7 @@ Setup
 Example authorisation template
 ==============================
 
-`Authorize <authorize.html>`_
+`Authorize </authorize.html>`_
 
 =========
 Endpoints
