@@ -9,9 +9,9 @@ class Token
 {
     /**
      * @param string $accessToken
-     * @param array $scope
+     * @param array $scope = []
      */
-    public function __construct(string $accessToken, array $scope)
+    public function __construct(string $accessToken, array $scope = [])
     {
         $this->accessToken = $accessToken;
         $this->scope = $scope;
