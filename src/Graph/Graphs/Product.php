@@ -43,4 +43,23 @@ class Product extends AbstractGraph
         }
 GRAPH;
     }
+    
+    /**
+     * @param array $extra = []
+     *
+     * @return string
+     */
+    public static function inventory(array $extra = []): string
+    {
+        $extraGraph = implode(PHP_EOL, $extra);
+        
+        return <<<GRAPH
+{
+                id
+                title
+                totalInventory
+                tracksInventory
+        }
+GRAPH;
+    }
 }

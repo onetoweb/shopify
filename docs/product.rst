@@ -41,4 +41,16 @@ Yields products using the Generator syntax.
     }
 
 
+List all products inventory only
+````````````````````````````````
+
+Yields product inventory using the Generator syntax.
+
+.. code-block:: php
+    
+    foreach ($client->product->listAllInventory() as $inventory) {
+        
+    }
+
+
 `Back to top <#top>`_

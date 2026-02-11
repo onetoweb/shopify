@@ -49,6 +49,51 @@ GRAPH
             );
     }
     
+    /**
+     * @return Generator
+     */
+    public function listAllInventory(int $first = 100): Generator
+    {
+        $inventory = ProductGraph::inventory();
+        
+        // setup graph
+        $graph = <<<GRAPH
+query GetProducts {
+    products(first: $first, %s) {
+        nodes $inventory
+        pageInfo {
+            hasPreviousPage
+            hasNextPage
+            startCursor
+            endCursor
+        }
+    }
+}
+GRAPH;
+        
+        $cursor = null;
+        $continue = false;
+        
+        do {
+            
+            $after = $cursor !== null ? 'after: "'.$cursor.'"' : '';
+            
+            $result = $this->client->request(sprintf($graph, $after));
+            
+            $continue = (
+                isset($result['data']['products']['pageInfo']['hasNextPage'])
+                and $result['data']['products']['pageInfo']['hasNextPage']
+                );
+            
+            foreach ($result['data']['products']['nodes'] as $product) {
+                yield $product;
+            }
+            
+            $cursor = $result['data']['products']['pageInfo']['endCursor'];
+            
+            
+        } while ($continue);
+    }
     
     /**
      * @return Generator
