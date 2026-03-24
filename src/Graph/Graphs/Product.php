@@ -27,6 +27,13 @@ class Product extends AbstractGraph
             status
             productType
             description
+            images(first: 250) {
+                edges {
+                    node {
+                        url
+                    }
+                }
+            }
             category {
                 name
             }
