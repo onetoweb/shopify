@@ -15,3 +15,4 @@ Add images to full product
 ## [1.0.3] - 2026-03-25
 
 Add product count
+Expand full product
