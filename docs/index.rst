@@ -109,3 +109,4 @@ Endpoints
 =========
 
 * `Product <product.rst>`_
+* `Catalog <catalog.rst>`_
