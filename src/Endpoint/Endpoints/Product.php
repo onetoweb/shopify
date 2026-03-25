@@ -18,14 +18,15 @@ class Product extends AbstractEndpoint
      */
     public function count(string $query = ''): ?array
     {
-        return $this->client->request(<<<GRAPH
+        $graph = <<<GRAPH
 query GetProducts {
     productsCount(query: "$query") {
         count
     }
 }
-GRAPH
-);
+GRAPH;
+        
+        return $this->client->request($graph);
     }
     
     /**
@@ -37,16 +38,15 @@ GRAPH
     {
         $full = ProductGraph::full();
         
-        return $this->client->request(<<<GRAPH
+        $graph = <<<GRAPH
 query GetProducts {
     products(first: $first) {
-        
         nodes $full
     }
 }
-GRAPH
-);
-
+GRAPH;
+        
+        return $this->client->request($graph);
     }
     
     /**
@@ -58,15 +58,18 @@ GRAPH
     {
         $full = ProductGraph::full();
         
-        return $this->client->request(<<<GRAPH
+        $graph = <<<GRAPH
 query {
     product(id: "$id") $full
 }
-GRAPH
-            );
+GRAPH;
+        
+        return $this->client->request($graph);
     }
     
     /**
+     * @param int $first = 100
+     * 
      * @return Generator
      */
     public function listAllInventory(int $first = 100): Generator
@@ -88,31 +91,14 @@ query GetProducts {
 }
 GRAPH;
         
-        $cursor = null;
-        $continue = false;
-        
-        do {
-            
-            $after = $cursor !== null ? 'after: "'.$cursor.'"' : '';
-            
-            $result = $this->client->request(sprintf($graph, $after));
-            
-            $continue = (
-                isset($result['data']['products']['pageInfo']['hasNextPage'])
-                and $result['data']['products']['pageInfo']['hasNextPage']
-                );
-            
-            foreach ($result['data']['products']['nodes'] as $product) {
-                yield $product;
-            }
-            
-            $cursor = $result['data']['products']['pageInfo']['endCursor'];
-            
-            
-        } while ($continue);
+        foreach ($this->fetchAll('products', $graph) as $product) {
+            yield $product;
+        }
     }
     
     /**
+     * @param int $first = 100
+     * 
      * @return Generator
      */
     public function listAll(int $first = 100): Generator
@@ -134,27 +120,8 @@ query GetProducts {
 }
 GRAPH;
         
-        $cursor = null;
-        $continue = false;
-        
-        do {
-            
-            $after = $cursor !== null ? 'after: "'.$cursor.'"' : '';
-            
-            $result = $this->client->request(sprintf($graph, $after));
-            
-            $continue = (
-                isset($result['data']['products']['pageInfo']['hasNextPage'])
-                and $result['data']['products']['pageInfo']['hasNextPage']
-            );
-            
-            foreach ($result['data']['products']['nodes'] as $product) {
-                yield $product;
-            }
-            
-            $cursor = $result['data']['products']['pageInfo']['endCursor'];
-            
-            
-        } while ($continue);
+        foreach ($this->fetchAll('products', $graph) as $product) {
+            yield $product;
+        }
     }
 }
