@@ -18,32 +18,36 @@ class Catalog extends AbstractEndpoint
      */
     public function count(string $query = ''): ?array
     {
-        return $this->client->request(<<<GRAPH
+        $graph = <<<GRAPH
 query GetCatalogs {
     catalogsCount(query: "$query") {
         count
     }
 }
-GRAPH
-            );
+GRAPH;
+        
+        return $this->client->request($graph);
     }
     
     /**
+     * @param int $first = 250
+     * 
      * @return array|NULL
      */
     public function first(int $first = 250): ?array
     {
         $full = CatalogGraph::full();
         
-        return $this->client->request(<<<GRAPH
+        $graph = <<<GRAPH
 {
     catalogs(first:$first) {
         
         nodes $full
     }
 }
-GRAPH
-);
+GRAPH;
+        
+        return $this->client->request($graph);
     }
     
     /**
@@ -55,12 +59,13 @@ GRAPH
     {
         $full = CatalogGraph::full();
         
-        return $this->client->request(<<<GRAPH
+        $graph = <<<GRAPH
 query {
     catalog(id: "$id") $full
 }
-GRAPH
-        );
+GRAPH;
+        
+        return $this->client->request($graph);
     }
     
     /**
