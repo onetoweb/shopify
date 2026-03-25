@@ -110,3 +110,4 @@ Endpoints
 
 * `Product <product.rst>`_
 * `Catalog <catalog.rst>`_
+* `Collection <collection.rst>`_
