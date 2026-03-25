@@ -53,4 +53,13 @@ Yields product inventory using the Generator syntax.
     }
 
 
+Count products
+``````````````
+
+.. code-block:: php
+    
+    $queryString = '';
+    $result = $client->product->count($queryString);
+
+
 `Back to top <#top>`_

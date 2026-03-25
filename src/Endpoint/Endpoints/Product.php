@@ -12,6 +12,23 @@ use Generator;
 class Product extends AbstractEndpoint
 {
     /**
+     * @param string $query = ''
+     * 
+     * @return array|NULL
+     */
+    public function count(string $query = ''): ?array
+    {
+        return $this->client->request(<<<GRAPH
+query GetProducts {
+    productsCount(query: "$query") {
+        count
+    }
+}
+GRAPH
+);
+    }
+    
+    /**
      * @param $first = 100
      * 
      * @return array|NULL
