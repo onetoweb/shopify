@@ -3,6 +3,8 @@
 namespace Onetoweb\Shopify\Graph\Graphs;
 
 use Onetoweb\Shopify\Graph\AbstractGraph;
+use Onetoweb\Shopify\Graph\Graphs\{Collection as CollectionGraph};
+use Onetoweb\Shopify\Graph\Graphs\{ProductVariant as ProductVariantGraph};
 
 /**
  * Product Endpoint.
@@ -17,6 +19,9 @@ class Product extends AbstractGraph
     public static function full(array $extra = []): string
     {
         $extraGraph = implode(PHP_EOL, $extra);
+        
+        $variantGraph = ProductVariantGraph::full();
+        $collectionGraph = CollectionGraph::full();
         
         return <<<GRAPH
 {
@@ -70,24 +75,12 @@ class Product extends AbstractGraph
             }
             collections(first: 250) {
                 edges {
-                    node {
-                        id
-                        title
-                        description
-                        image {
-                            url
-                        }
-                    }
+                    node $collectionGraph
                 }
             }
             variants(first: 250) {
                 edges {
-                    node {
-                        id
-                        title
-                        barcode
-                        sku
-                    }
+                    node $variantGraph
                 }
             }
             options(first: 250) {
