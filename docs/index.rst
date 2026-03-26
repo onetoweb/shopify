@@ -111,3 +111,4 @@ Endpoints
 * `Product <product.rst>`_
 * `Catalog <catalog.rst>`_
 * `Collection <collection.rst>`_
+* `ProductVariant <product_variant.rst>`_
