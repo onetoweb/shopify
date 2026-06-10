@@ -17,7 +17,7 @@
 - Add product count
 - Expand full product
 
-## [1.0.4] - 2026-03-25
+## [1.0.4] - 2026-06-10
 
 - Add catalog endpoint
 - Add collection endpoint
