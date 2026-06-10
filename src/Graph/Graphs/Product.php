@@ -20,7 +20,7 @@ class Product extends AbstractGraph
     {
         $extraGraph = implode(PHP_EOL, $extra);
         
-        $variantGraph = ProductVariantGraph::full();
+        $variantGraph = ProductVariantGraph::slim();
         $collectionGraph = CollectionGraph::full();
         
         return <<<GRAPH
