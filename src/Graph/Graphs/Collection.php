@@ -31,6 +31,14 @@ class Collection extends AbstractGraph
                 id
                 url
             }
+            metafield(key: "subcollections", namespace: "collection_info") {
+                id
+                key
+                type
+                createdAt
+                value
+            }
+            $extraGraph
             updatedAt
         }
 GRAPH;
