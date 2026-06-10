@@ -30,6 +30,68 @@ GRAPH;
     }
     
     /**
+     * @return array|NULL
+     */
+    public function struct(): ?array
+    {
+        /**
+         * @param array $collection
+         * @param array $foundCollections
+         * 
+         * @return array
+         */
+        $getSubcollections = function(array $collection, array &$foundCollections) use (&$getSubcollections) : array {
+            
+            $subcollectionIds = json_decode($collection['metafield']['value']);
+            
+            $subcollections = [];
+            if ($subcollectionIds !== null) {
+                
+                foreach ($subcollectionIds as $subcollectionId) {
+                    
+                    $subcollection = null;
+                    if (isset($foundCollections[$subcollectionId])) {
+                        
+                        $subcollection = $foundCollections[$subcollectionId];
+                        
+                    } else {
+                        
+                        $foundSubcollection = $this->getSlim($subcollectionId);
+                        
+                        if (isset($foundSubcollection['data']['collection'])) {
+                            
+                            $subcollection = $foundSubcollection['data']['collection'];
+                            
+                            $foundCollections[$subcollectionId] = $subcollection;
+                        }
+                    }
+                    
+                    if ($subcollection !== null) {
+                        
+                        $subcollection['subcollections'] = $getSubcollections($subcollection, $foundCollections);
+                        
+                        $subcollections[] = $subcollection;
+                    }
+                }
+            }
+            
+            return $subcollections;
+        };
+        
+        $foundCollections = [];
+        $struct = [];
+        
+        foreach ($this->listAllSlim() as $collection) {
+            
+            $collection['subcollections'] = $getSubcollections($collection, $foundCollections);
+            
+            $struct[] = $collection;
+        }
+        
+        return $struct;
+    }
+    
+    /**
      * @param int $first = 250
      * 
      * @return array|NULL
@@ -65,6 +127,53 @@ query {
 GRAPH;
         
         return $this->client->request($graph);
+    }
+    
+    /**
+     * @param string $id
+     *
+     * @return array|NULL
+     */
+    public function getSlim(string $id): ?array
+    {
+        $full = CollectionGraph::slim();
+        
+        $graph = <<<GRAPH
+query {
+    collection(id: "$id") $full
+}
+GRAPH;
+        
+        return $this->client->request($graph);
+    }
+    
+    /**
+     * @param int $first = 100
+     *
+     * @return Generator
+     */
+    public function listAllSlim(int $first = 100): Generator
+    {
+        $slim = CollectionGraph::slim();
+        
+        // setup graph
+        $graph = <<<GRAPH
+query GetCollections {
+    collections(first: $first, %s) {
+        nodes $slim
+        pageInfo {
+            hasPreviousPage
+            hasNextPage
+            startCursor
+            endCursor
+        }
+    }
+}
+GRAPH;
+        
+        foreach ($this->fetchAll('collections', $graph) as $product) {
+            yield $product;
+        }
     }
     
     /**

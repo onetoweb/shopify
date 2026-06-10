@@ -50,4 +50,12 @@ Count collections
     $result = $client->collection->count($queryString);
 
 
+Get collection structure
+````````````````````````
+
+.. code-block:: php
+    
+    $struct = $client->collection->struct();
+
+
 `Back to top <#top>`_

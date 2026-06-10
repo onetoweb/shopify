@@ -21,8 +21,7 @@
 
 - Add catalog endpoint
 - Add collection endpoint
-
-## [1.0.5] - 2026-03-26
-
 - Add product variant endpoint
 - Expand full product
+- Add subcollection metafield to collection graph
+- Add struct method to collection endpoint

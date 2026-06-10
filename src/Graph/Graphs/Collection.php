@@ -31,9 +31,7 @@ class Collection extends AbstractGraph
                 id
                 url
             }
-            metafield(key: "subcollections", namespace: "collection_info") {
-                id
-                key
+            metafield(key: "parent_collections", namespace: "collection_info") {
                 value
             }
             $extraGraph
@@ -55,6 +53,9 @@ GRAPH;
 {
             id
             title
+            productsCount {
+                count
+            }
             metafield(key: "subcollections", namespace: "collection_info") {
                 value
             }
