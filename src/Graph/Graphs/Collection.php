@@ -34,12 +34,31 @@ class Collection extends AbstractGraph
             metafield(key: "subcollections", namespace: "collection_info") {
                 id
                 key
-                type
-                createdAt
                 value
             }
             $extraGraph
             updatedAt
+        }
+GRAPH;
+    }
+    
+    /**
+     * @param array $extra = []
+     *
+     * @return string
+     */
+    public static function slim(array $extra = []): string
+    {
+        $extraGraph = implode(PHP_EOL, $extra);
+        
+        return <<<GRAPH
+{
+            id
+            title
+            metafield(key: "subcollections", namespace: "collection_info") {
+                value
+            }
+            $extraGraph
         }
 GRAPH;
     }
