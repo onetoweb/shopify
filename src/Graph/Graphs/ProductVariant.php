@@ -11,6 +11,26 @@ class ProductVariant extends AbstractGraph
 {
     /**
      * @param array $extra = []
+     *
+     * @return string
+     */
+    public static function slim(array $extra = []): string
+    {
+        $extraGraph = implode(PHP_EOL, $extra);
+        
+        return <<<GRAPH
+{
+            id
+            title
+            barcode
+            sku
+            $extraGraph
+        }
+GRAPH;
+    }
+    
+    /**
+     * @param array $extra = []
      * 
      * @return string
      */
